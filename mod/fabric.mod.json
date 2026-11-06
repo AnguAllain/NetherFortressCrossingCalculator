@@ -1,0 +1,10 @@
+{
+  "schemaVersion": 1,
+  "id": "nfcc",
+  "version": "${version}",
+  "name": "NFCC-NetherFortressCrossingCalculator",
+  "description": "Nether Fortress Crossing Calculator - 下界堡垒十字路口工具（模组版）",
+  "license": "MIT",
+  "environment": "*",
+  "entrypoints": { "main": ["nfc.NfcMod"] }
+}

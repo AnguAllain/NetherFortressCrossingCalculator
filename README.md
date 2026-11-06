@@ -70,21 +70,23 @@
 
 全部在 `/nfcc` 下面，需要权限等级 2（gamemaster）。
 
-顺序是固定的：**clear → place → calc → check**，跳步会被拒绝。
+先 `/nfcc clear` 圈定区域，再选下面两种算法之一，跳步会被拒绝。
 
 ```
-/nfcc seed [值]                            看/设种子（不设就用存档种子）
-/nfcc clear <半径> <normal|complete>       以自己为中心清空
-/nfcc clear <pos1> <pos2> <normal|complete> 清空指定矩形
-/nfcc place                                把十字路口缺的下界砖补回去
-/nfcc calc <normal|soul>                   算球心并统计
-/nfcc check                                按统计结果画框
-/nfcc stop                                 停掉当前正在跑的 clear / place / check
+/nfcc seed [值]                                 看/设种子（不设就用存档种子）
+/nfcc clear <半径> [complete]                   以自己为中心清空，默认 normal（清到 Y143）
+/nfcc clear <pos1> <pos2> [complete]            清空指定矩形
+/nfcc calc cross <soul|normal>                  十字路口模式：算球心 + 统计，然后贴回路口、画框，一条命令跑完
+/nfcc calc normal <soul|normal>                 整座堡垒体积模式：只算总体积 / 灵魂沙体积 / 百分比，再按子分支定中心点
+/nfcc stop                                      停掉当前正在跑的整个任务
 ```
 
-- `normal` 清到 y=143，`complete` 清到 y=255，都从最底下清起。
-- 里面连十字路口一起清空，之后再 /nfcc place 把它们贴回来。
-- `soul` 只把灵魂沙峡谷里的路口算进「值得刷」的统计里。
+- `clear` 不带参数就是 `normal`（清到 y=143），加 `complete` 才清到 y=255；清的时候连十字路口一起清，清完会顺带报一遍堡垒总体积。
+- `calc cross` 一条命令做三件事：算中心点与统计 → 把十字路口缺的下界砖贴回去 → 按统计结果画框。顺序上不分先后，跑完就是三件都做完。
+- `calc cross soul` 只把灵魂沙峡谷里的路口算进「值得刷」的统计；`normal` 则算全部群系。
+- `calc normal` 的「体积」是整座堡垒全部组件包围盒之和，不是路口体积；`soul` / `normal` 只影响算中心点时用哪批路口。
+- 画框用染色玻璃：绿=全在球内、黄=部分、红=全在球外、橙=重叠；路口框外扩 1 格，重叠框外扩 2 格。
+- 提示文字「等待加载…」每 tick 刷一次，不会自己消失，`/nfcc stop` 时一起清掉。
 
 ### 它会怎么干活
 
